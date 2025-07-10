@@ -2,6 +2,7 @@ import { fetchMutation } from "convex/nextjs";
 import { NextResponse } from "next/server";
 import axios from "axios";
 import { api } from "../../../../../convex/_generated/api";
+import { OrderProduct, RawOrderProduct } from "@/types/order.type";
 
 const ACCESS_TOKEN = process.env.TIENDANUBE_ACCESS_TOKEN!;
 
@@ -27,7 +28,8 @@ export async function POST(req: Request) {
     const createdAt = order.created_at;
     const customerName = order.contact_name || "Cliente sin nombre";
 
-    const orderProducts = order.products.map((p: any) => ({
+    const orderProducts: OrderProduct[] = order.products.map((p: RawOrderProduct ) => ({
+      orderExternalId: order.externalId, 
       productId: p.product_id.toString(),
       name: p.name || "Sin nombre",
       price: Number(p.price || 0),
@@ -83,8 +85,12 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ ok: true });
-  } catch (err: any) {
-    console.error("❌ Error al procesar orden:", err.response?.data || err.message);
+  }catch (err) {
+    if (err instanceof Error) {
+      console.error("Error al procesar webhook:", err.message);
+    } else {
+      console.error("Error desconocido al procesar webhook:", err);
+    }
     return NextResponse.json({ error: "Error interno" }, { status: 500 });
-  }
+ }
 }

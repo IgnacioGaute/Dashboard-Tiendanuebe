@@ -25,8 +25,11 @@ import { Button } from '@/components/ui/button';
 import { OrdersChart } from './chart';
 
 export function OrdersRealtime() {
-  const orders = useQuery(api.functions.order.getAllOrders.default, {}) || [];
-  const orderProducts = useQuery(api.functions.order.getAllOrderProducts.default, {}) || [];
+  const rawOrders = useQuery(api.functions.order.getAllOrders.default, {});
+  const rawOrderProducts = useQuery(api.functions.order.getAllOrderProducts.default, {});
+
+  const orders = useMemo(() => rawOrders ?? [], [rawOrders]);
+  const orderProducts = useMemo(() => rawOrderProducts ?? [], [rawOrderProducts]);
 
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();

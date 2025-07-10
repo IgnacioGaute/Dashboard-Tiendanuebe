@@ -1,7 +1,6 @@
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/components/theme-provider';
-import { cookies } from 'next/headers';
 import { Metadata } from 'next';
 import { ClientConvexProvider } from '@/components/ui/client-convex-provider';
 

@@ -2,6 +2,7 @@ import { fetchMutation } from "convex/nextjs";
 import { NextResponse } from "next/server";
 import axios from "axios";
 import { api } from "../../../../../convex/_generated/api";
+import { RawCategory } from "@/types/product.type";
 
 const ACCESS_TOKEN = process.env.TIENDANUBE_ACCESS_TOKEN!;
 
@@ -25,7 +26,7 @@ export async function POST(req: Request) {
         const name = product.name?.es || product.name || "Sin nombre";
         const price = Number(product.variants?.[0]?.price || 0);
         const externalId = product.id.toString();
-        const categories = product.categories?.map((cat: any) => ({
+        const categories = product.categories?.map((cat: RawCategory) => ({
           externalId: cat.id.toString(),
           name: cat.name?.es || "Sin nombre",
         })) || [];
@@ -63,7 +64,7 @@ export async function POST(req: Request) {
         const name = updatedProduct.name?.es || updatedProduct.name || "Sin nombre";
         const price = Number(updatedProduct.variants?.[0]?.price || 0);
         const externalId = updatedProduct.id.toString();
-        const categories = updatedProduct.categories?.map((cat: any) => ({
+        const categories = updatedProduct.categories?.map((cat: RawCategory) => ({
           externalId: cat.id.toString(),
           name: cat.name?.es || "Sin nombre",
         })) || [];
@@ -84,8 +85,12 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ ok: true });
-  } catch (err: any) {
-    console.error("❌ Error al procesar webhook:", err.response?.data || err.message);
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error("Error al procesar webhook:", err.message);
+    } else {
+      console.error("Error desconocido al procesar webhook:", err);
+    }
     return NextResponse.json({ error: "Error interno" }, { status: 500 });
-  }
+ }
 }

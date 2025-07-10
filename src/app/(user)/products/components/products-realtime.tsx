@@ -5,21 +5,31 @@ import { api } from "../../../../../convex/_generated/api";
 import { ProductsTable } from "./products-table";
 import { productColumns } from "./product-columns";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+
+type Category = {
+  _id: string;
+  name: string;
+};
 
 export function ProductsRealtime() {
-  const products = useQuery(api.functions.product.getAllProducts.default, {}) || [];
-  const categories = useQuery(api.functions.category.getAllCategories.default, {}) || [];
-  const orderProducts = useQuery(api.functions.order.getAllOrderProducts.default, {}) || [];
+  const rawProducts = useQuery(api.functions.product.getAllProducts.default, {});
+  const rawCategories = useQuery(api.functions.category.getAllCategories.default, {});
+  const rawOrderProducts = useQuery(api.functions.order.getAllOrderProducts.default, {});
+
+  const products = useMemo(() => rawProducts ?? [], [rawProducts]);
+  const categories = useMemo(() => rawCategories ?? [], [rawCategories]);
+  const orderProducts = useMemo(() => rawOrderProducts ?? [], [rawOrderProducts]);
 
   const [selected, setSelected] = useState("TODOS");
 
-  const filteredProducts =
-    selected === "TODOS"
-      ? products
-      : products.filter((product) =>
-          product.categories?.some((cat: any) => cat.name === selected)
-        );
+  const filteredProducts = useMemo(() => {
+    if (selected === "TODOS") return products;
+
+    return products.filter((product) =>
+      product.categories?.some((cat: { name: string }) => cat.name === selected)
+    );
+  }, [selected, products]);
 
   return (
     <Tabs
@@ -37,7 +47,7 @@ export function ProductsRealtime() {
           >
             Todas
           </TabsTrigger>
-          {categories.map((cat: any) => (
+          {categories.map((cat: Category) => (
             <TabsTrigger
               key={cat._id}
               value={cat.name}

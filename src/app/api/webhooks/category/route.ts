@@ -71,8 +71,12 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ ok: true });
-  } catch (err: any) {
-    console.error("❌ Error al procesar webhook:", err.response?.data || err.message);
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error("Error al procesar webhook:", err.message);
+    } else {
+      console.error("Error desconocido al procesar webhook:", err);
+    }
     return NextResponse.json({ error: "Error interno" }, { status: 500 });
-  }
+ }
 }

@@ -27,7 +27,7 @@ export function NavUser() {
     <>
       <SidebarMenu>
         <SidebarMenuItem>
-          <DropdownMenu>
+          <DropdownMenu onOpenChange={(open) => setIsExpanded(open)}>
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton
                 size="lg"

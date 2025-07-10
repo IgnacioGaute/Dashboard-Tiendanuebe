@@ -17,3 +17,10 @@ export type OrderProduct = {
     price: number;
     quantity: number;
 }
+
+export type RawOrderProduct = {
+  product_id: string | number;
+  name?: string;
+  price?: string | number;
+  quantity?: string | number;
+};
