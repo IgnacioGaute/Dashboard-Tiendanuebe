@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# My Dashboard - Tienda Nube Integration
 
-## Getting Started
+Este proyecto es una integración con la API de Tienda Nube utilizando **Next.js**, **Convex** y **ShadCN UI**. Permite ver y gestionar productos, órdenes y categorías en tiempo real.
 
-First, run the development server:
+---
+
+## 🚀 Desarrollo
+
+Para iniciar el servidor de desarrollo, ejecutá:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+pnpm run dev
+Luego abrí http://localhost:3000 en tu navegador.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+📦 Producción (Configuración de Tienda Nube)
+Para correr esta app en producción con datos reales, seguí estos pasos:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Crear cuenta y aplicación en Tienda Nube
+Registrate en Tienda Nube Developers
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Creá una nueva aplicación
 
-## Learn More
+Dentro de la aplicación, creá una tienda demo
 
-To learn more about Next.js, take a look at the following resources:
+2. Configurar variables de entorno
+Reemplazá las siguientes variables en tu .env.local (y luego en Vercel u otro entorno de producción):
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+ini
+Mostrar siempre los detalles
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Copiar
+TIENDANUBE_CLIENT_ID=TU_CLIENT_ID
+TIENDANUBE_CLIENT_SECRET=TU_CLIENT_SECRET
+TIENDANUBE_ACCESS_TOKEN=TO_BE_GENERATED
+STORE_ID=TU_STORE_ID
+EMAIL=TU_EMAIL
+3. Obtener TIENDANUBE_ACCESS_TOKEN
+En la configuración de tu app en Tienda Nube, hacé clic en "Conectar con la API"
 
-## Deploy on Vercel
+Presioná el botón "Instalar aplicación"
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Se abrirá una ventana con un código code (válido solo por 5 minutos)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Ejecutá el script:
+
+bash
+
+Copiar
+npx tsx scripts/generateAccessToken.ts
+Antes de ejecutarlo, asegurate de reemplazar en ese script:
+
+Copiar
+client_id
+client_secret
+code
+Te devolverá el access_token y store_id. Usalos para actualizar las variables TIENDANUBE_ACCESS_TOKEN y STORE_ID.
+
+4. Registrar webhooks
+Ejecutá el siguiente script:
+
+Copiar
+npx tsx scripts/registerWebhook.ts
+Esto creará todos los webhooks necesarios para recibir eventos de productos, órdenes y categorías.
+
+🌐 Despliegue
+En Vercel, recordá configurar las variables de entorno mencionadas para que los webhooks funcionen correctamente.
