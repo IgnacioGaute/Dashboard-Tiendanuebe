@@ -8,8 +8,8 @@ import axios from "axios";
       grant_type: "authorization_code",
       code: "c533ca1dac464f71dde1d5ff4b05f559755b0105",
     });
-    console.log("✅ Access Token:", res.data.access_token);
-    console.log("🛒 Store ID:", res.data.user_id);
+    console.log("Access Token:", res.data.access_token);
+    console.log("Store ID:", res.data.user_id);
   } catch (err: any) {
     console.error("❌ Error:", err.response?.data || err.message);
   }
