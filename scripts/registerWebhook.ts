@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://2634429a380f.ngrok-free.app/api/webhooks";
+const BASE_URL = "https://dashboard-tiendanuebe-u1cw.vercel.app/api/webhooks";
 
 const events = [
   "product/created",
